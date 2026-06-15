@@ -1,0 +1,62 @@
+CONNECTIONS
+
+# Motor and Valve Control System with Emergency Stop
+
+This project implements a motor and valve control system using an Arduino Uno, L298N motor driver, relay module, and an emergency stop button. The system allows independent control of the DC motor and solenoid valve through serial commands.
+
+The Arduino Uno acts as the main controller and communicates with the L298N motor driver to regulate the speed and direction of the DC motor using PWM signals. A relay module is used to operate the solenoid valve independently, allowing fluid flow to be controlled without affecting the motor operation. An LED connected to the Arduino provides a visual indication of the motor status by blinking while the motor is running.
+
+An emergency stop button is implemented using an interrupt on pin 2. When pressed, the system immediately stops the motor, closes the valve, and enters a safe state. Normal operation can be restored only after sending a reset command through the Serial Monitor.
+
+NOTE: No flyback diode was used in the current implementation.
+
+
+
+HARDWARE
+
+# Motor and Valve Control System with Emergency Stop
+
+This project implements a motor and valve control system using an Arduino Uno, L298N motor driver, relay module, and an emergency stop button. The system allows independent control of the DC motor and solenoid valve through serial commands.
+
+The Arduino Uno acts as the main controller and communicates with the L298N motor driver to regulate the speed and direction of the DC motor using PWM signals. A relay module is used to operate the solenoid valve independently, allowing fluid flow to be controlled without affecting the motor operation. An LED connected to the Arduino provides a visual indication of the motor status by blinking while the motor is running.
+
+An emergency stop button is implemented using an interrupt on pin 2. When pressed, the system immediately stops the motor, closes the valve, and enters a safe state. Normal operation can be restored only after sending a reset command through the Serial Monitor.
+
+NOTE: No flyback diode was used in the current implementation.
+
+
+WORKING
+
+The system is controlled by the Arduino Uno, which receives commands from the Serial Monitor and controls the motor and valve accordingly. The L298N motor driver receives PWM and direction signals from the Arduino and drives the DC motor at the required speed. The relay module acts as a switch to control the solenoid valve independently of the motor. When the valve is activated, the relay energizes and opens the valve to allow fluid flow; when deactivated, the valve closes and stops the flow. An LED connected to the Arduino provides a visual indication by blinking while the motor is running and turns ON(without blinking) when the motor stops. For safety, an emergency stop push button is connected to an interrupt pin. Pressing the button immediately stops the motor, closes the valve, and places the system in an emergency state. The system can be restored to normal operation only after receiving a reset command from the Serial Monitor.
+
+### Functions of Serial Commands in the Code
+
+* **`1` to `9` – Motor Speed Control**
+
+  When a number between `1` and `9` is entered through the Serial Monitor, the Arduino converts it into a PWM value and sends it to the L298N motor driver. Higher numbers result in higher motor speeds. The LED blinks indicating that the motor is running.Drive motor 0–255 PWM; ramp speed over 3 s. 
+
+* **`0` – Motor OFF**
+
+  When `0` is entered, the Arduino sets the PWM value to zero, stopping the DC motor completely. The status LED also turns ON(still).
+
+* **`o` – Valve OPEN**
+
+  When `o` is entered, the Arduino activates the relay module by setting the relay pin HIGH. This energizes the solenoid valve and opens it, allowing fluid to flow.
+
+* **`f` – Valve CLOSE**
+
+  When `f` is entered, the Arduino deactivates the relay module by setting the relay pin LOW. This closes the solenoid valve and stops the fluid flow. The motor continues to run if it was already running.
+
+* **`r` – Reset System**
+
+  When the system is in the emergency stop state, entering `r` clears the emergency condition and allows the system to operate normally again.
+
+### Emergency Stop Function
+
+When the emergency stop button connected to pin 2 is pressed, an interrupt is triggered. The Arduino immediately:
+
+* Stops the DC motor.
+* Closes the solenoid valve.
+* Displays an emergency stop message on the Serial Monitor.
+
+The system remains in this state until the user enters the **`r`** command.
